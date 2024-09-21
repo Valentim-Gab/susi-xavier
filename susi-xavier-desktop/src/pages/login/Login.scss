@@ -1,0 +1,4 @@
+.background-video {
+  @apply w-full h-screen object-cover bg-white;
+  filter: opacity(100%) grayscale(0);
+}

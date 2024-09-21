@@ -1,0 +1,18 @@
+meta {
+  name: Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3001/login
+  body: json
+  auth: bearer
+}
+
+body:json {
+  {
+    "username": "adm@email.vale",
+    "password": "123"
+  }
+}

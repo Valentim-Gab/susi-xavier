@@ -1,0 +1,33 @@
+@import "@/assets/scss/media-queries.scss";
+
+.navbar-mobile {
+  transform: scaleY(0);
+  transform-origin: top;
+  position: fixed;
+  transition: 0.4s;
+  opacity: 0;
+  top: 56px;
+
+  @media (min-width: $sm) {
+    top: 64px;
+  }
+
+  &[data-open="true"] {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  .items {
+    @apply shadow-md;
+
+    li {
+      .item {
+        transition: 0.4s;
+      }
+
+      &:hover > .item {
+        transform: translateX(1rem);
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Update
+  type: http
+  seq: 3
+}
+
+patch {
+  url: http://localhost:3001/blog/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoidXNlcjAxQGVtYWlsLnZhbGUiLCJyb2xlIjpbInVzZXIiXSwiaWF0IjoxNzI2Nzc5MTUyLCJleHAiOjE3MjY3ODA5NTJ9.ZTkl3Akc1-Ghuyp6VfbgHqHw9be8wXXlLab4P0a287Y
+}
+
+body:json {
+  {
+    "message": "Edit Teste User"
+  }
+}
