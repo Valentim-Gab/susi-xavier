@@ -1,7 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap");
 
 @layer utilities {
   .text-balance {
@@ -11,11 +12,11 @@
 
 @layer base {
   :root {
-    --primary: #6E80FF;
-    --secondary: #632A64;
-    --light-purple: #F0F2FF;
+    --primary: #6e80ff;
+    --secondary: #632a64;
+    --light-purple: #f0f2ff;
     --background: #e4e4e4;
-    --background-secondary: #F0F2FF;
+    --background-secondary: #f0f2ff;
     --foreground: #636363;
     --foreground-strong: #000;
     --card: #fff;
@@ -27,7 +28,7 @@
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
     --accent: 240 4.8% 95.9%;
-    --accent-foreground: #FF12FB;
+    --accent-foreground: #ff12fb;
     --positive: #31c095;
     --positive-foreground: #fff;
     --destructive: 0 84.2% 60.2%;
@@ -44,8 +45,8 @@
   }
 
   .dark {
-    --primary: #6E80FF;
-    --secondary: #632A64;
+    --primary: #6e80ff;
+    --secondary: #632a64;
     --background: #222;
     --background-secondary: #030712;
     --foreground: #eaeaea;
@@ -80,6 +81,8 @@
     @apply border-border m-0 p-0;
     box-sizing: border-box;
     text-decoration: none;
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
     // scrollbar-color: auto !important;
 
     // &:hover {
@@ -92,27 +95,28 @@
     //   border: none;
     //   outline: none;
     // }
-    
+
     // ::-webkit-scrollbar-thumb {
-    //   background-color: var(--secondary) !important; 
+    //   background-color: var(--secondary) !important;
     //   border-radius: 0.4rem;
     // }
-    
+
     // ::-webkit-scrollbar-track {
     //   outline: 1px solid var(--background);
     //   background-color: transparent;
     // }
-    
+
     // ::-webkit-scrollbar-button {
     //   display: none;
     // }
-    
+
     // ::-webkit-scrollbar-corner {
     //   background-color: transparent;
     // }
   }
 
-  html, body {
+  html,
+  body {
     min-height: 100vh;
   }
 
@@ -121,7 +125,7 @@
   }
 
   .font-secondary {
-    font-family: 'Old Standard TT', serif;
+    font-family: "Old Standard TT", serif;
   }
 
   .main-container {
@@ -132,4 +136,3 @@
     @apply bg-card rounded shadow w-full;
   }
 }
-

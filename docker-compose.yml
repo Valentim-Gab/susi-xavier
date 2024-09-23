@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  susi-xavier-api:
+    build: ./susi-xavier-api
+    container_name: susi-xavier-api
+    environment:
+      SECRET: # Change this to secret_key
+      SECRET_REFRESH: # Change this to secret
+    ports:
+      - "3003:3000"
+    depends_on:
+      - susi-xavier-db
+    networks:
+      - susi-xavier-network
+
+  susi-xavier-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: # Change this to your user
+      POSTGRES_PASSWORD: # Change this to your password
+      POSTGRES_DB: # Change this to your database
+    ports:
+      - 5436:5432
+    networks:
+      - susi-xavier-network
+
+networks:
+  susi-xavier-network:
+    driver: bridge

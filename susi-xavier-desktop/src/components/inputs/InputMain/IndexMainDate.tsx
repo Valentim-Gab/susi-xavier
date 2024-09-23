@@ -31,7 +31,7 @@ const iconStyle = tv({
 })
 
 const InputMainDate = forwardRef<HTMLInputElement, InputMainInputProps>(
-  (props, ref) => {
+  (props, _ref) => {
     const { styleLabel, screen, field, label, ...rest } = props
 
     const [dateValue, setDateValue] = useState<string>(

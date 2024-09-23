@@ -18,7 +18,7 @@ interface InputMainInputMaskProps
 const InputMainInputMask = forwardRef<
   HTMLInputElement,
   InputMainInputMaskProps
->((props, ref) => {
+>((props, _ref) => {
   const {
     className,
     mask,
