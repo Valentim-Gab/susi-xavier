@@ -76,8 +76,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   private extractTokenFromCookies(context: ExecutionContext): string {
     const request = context.switchToHttp().getRequest()
 
-    const token = request.cookies.access_token ?? null
+    if (!request.cookies || !request.cookies.access_token) {
+      return null
+    }
 
-    return token
+    return request.cookies.access_token
   }
 }

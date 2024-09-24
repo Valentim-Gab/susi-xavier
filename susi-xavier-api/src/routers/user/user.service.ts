@@ -86,12 +86,15 @@ export class UserService {
   }
 
   async update(idUser: number, updateUserDto: UpdateUserDto) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...data } = updateUserDto
+
     return this.prismaUtil.performOperation(
       'Não foi porrível atualizar o usuário',
       async () => {
         return this.prisma.users.update({
           where: { id: idUser },
-          data: updateUserDto,
+          data: data,
           select: this.selectedColumns,
         })
       },
@@ -105,7 +108,7 @@ export class UserService {
         const encryptPassword = await this.bcrypt.encrypt(password)
 
         return this.prisma.users.update({
-          where: { id: idUser },
+          where: { id: 3 },
           data: { password: encryptPassword },
           select: this.selectedColumns,
         })

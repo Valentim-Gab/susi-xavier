@@ -5,7 +5,15 @@ meta {
 }
 
 post {
-  url: 
-  body: none
+  url: http://localhost:3000/user
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "name": "user04",
+    "email": "user04@email.vale",
+    "password": "123"
+  }
 }

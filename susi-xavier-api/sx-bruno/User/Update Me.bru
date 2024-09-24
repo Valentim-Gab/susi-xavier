@@ -1,0 +1,24 @@
+meta {
+  name: Update Me
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:3000/user/@me
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJuYW1lIjoidXNlcjAyQGVtYWlsLnZhbGUiLCJyb2xlIjpbInVzZXIiXSwiaWF0IjoxNzI3MjIwNDQzLCJleHAiOjE3MjcyMjIyNDN9.Mg46UcysO8lk8umCaLJ1RjOr3Jt1kpQrAO9B8LEQJ2g
+}
+
+body:json {
+  {
+    "name": "user02edt",
+    "last_name": "test last",
+    "email": "user02b@email.vale",
+    "password": "123"
+  }
+}

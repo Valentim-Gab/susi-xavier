@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  Res,
   ParseIntPipe,
 } from '@nestjs/common'
 import { UserService } from './user.service'
@@ -19,7 +18,6 @@ import { Roles } from 'src/decorators/roles.decorator'
 import { Role } from 'src/enums/Role'
 import { ValidationPipe } from 'src/pipes/validation.pipe'
 import { ReqUser } from 'src/decorators/req-user.decorator'
-import { Response } from 'express'
 import { users } from '@prisma/client'
 
 @Controller('user')
@@ -28,9 +26,7 @@ export class UserController {
 
   @Post()
   async create(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
-    const user = this.userService.create(createUserDto)
-
-    return user
+    return this.userService.create(createUserDto)
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -49,28 +45,9 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin)
-  @Get('admin')
-  testAdmin() {
-    return '{ "message": "Olá Admin" }'
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.User)
-  @Get('user')
-  testUser() {
-    return '{ "message": "Olá User" }'
-  }
-
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin)
   @Get(':id_user')
   findOne(@Param('id_user', ParseIntPipe) userId: number) {
     return this.userService.findOne(userId)
-  }
-
-  @Get('email/:email')
-  async findEmail(@Param('email') email: string, @Res() res: Response) {
-    res.json({ email_found: !!(await this.userService.findByEmail(email)) })
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -84,6 +61,16 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.User, Role.Admin)
+  @Patch('password')
+  updatePassword(
+    @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
+    @ReqUser() user: users,
+  ) {
+    return this.userService.updatePassword(user.id, updateUserDto.password)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @Patch(':id')
   update(
@@ -91,14 +78,6 @@ export class UserController {
     @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
   ) {
     return this.userService.update(userId, updateUserDto)
-  }
-
-  @Patch(':id/password')
-  updatePassword(
-    @Param('id', ParseIntPipe) userId: number,
-    @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
-  ) {
-    return this.userService.updatePassword(userId, updateUserDto.password)
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

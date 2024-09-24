@@ -1,0 +1,21 @@
+meta {
+  name: Update
+  type: http
+  seq: 6
+}
+
+patch {
+  url: http://localhost:3000/user/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiYWRtQGVtYWlsLnZhbGUiLCJyb2xlIjpbImFkbWluIiwidXNlciJdLCJpYXQiOjE3MjcyMjA5ODMsImV4cCI6MTcyNzIyMjc4M30.LZoQPhtFti59WXkcxjP0JDDpu3D9ABmWmD4t14ttokw
+}
+
+body:json {
+  {
+    "last_name": "Novo last name"
+  }
+}

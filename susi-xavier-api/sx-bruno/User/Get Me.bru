@@ -1,0 +1,15 @@
+meta {
+  name: Get Me
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:3000/user/@me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoidXNlcjAxQGVtYWlsLnZhbGUiLCJyb2xlIjpbInVzZXIiXSwiaWF0IjoxNzI3MjIwMTYwLCJleHAiOjE3MjcyMjE5NjB9.aVoFwMvfus3L8RVAAp4S-O_gfXBYXR9WZKVzB8v1moU
+}
