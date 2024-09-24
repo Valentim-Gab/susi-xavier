@@ -1,0 +1,62 @@
+.html-container {
+  @apply w-full text-foreground-strong text-base;
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  h4 {
+    @apply text-xl;
+  }
+
+  h5 {
+    @apply text-lg;
+  }
+
+  h6 {
+    @apply text-sm;
+  }
+
+  .ql-align-center {
+    text-align: center;
+  }
+
+  .ql-align-right {
+    text-align: right;
+  }
+
+  ol {
+    list-style: decimal;
+    padding-left: 3em;
+  }
+
+  ul {
+    list-style: disc;
+    padding-left: 3em;
+  }
+
+  u {
+    text-decoration: underline;
+  }
+
+  s {
+    text-decoration: line-through;
+  }
+
+  blockquote {
+    @apply border-l-4 border-gray-300 pl-4;
+  }
+
+  a[rel="noopener noreferrer"] {
+    color: #06c;
+    text-decoration: underline;
+  }
+}

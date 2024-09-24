@@ -9,10 +9,10 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { twMerge } from 'tailwind-merge'
-import { InputMain } from '@/components/inputs/InputMain/Index'
 import { useToast } from '@/hooks/use-toast'
 import { BlogService } from '@/services/BlogService'
 import ButtonMain from '../buttons/ButtonMain'
+import TextEditor from '../inputs/TextEditor/TextEditor'
 
 export const blogSchema = z.object({
   message: z.string().min(1, { message: 'A mensagem não pode ser vazia' }),
@@ -36,6 +36,8 @@ export default function FormBlog({ className, onRefresh }: FormBlogProps) {
 
   async function onSubmit(values: z.infer<typeof blogSchema>) {
     const isSuccess = await blogService.create(values)
+
+    console.log(values.message)
 
     if (isSuccess) {
       toast({
@@ -65,12 +67,7 @@ export default function FormBlog({ className, onRefresh }: FormBlogProps) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <InputMain.Root>
-                  <InputMain.Input {...field} styleLabel="primary" />
-                  <InputMain.Label value={field.value} styleLabel="primary">
-                    Mensagem
-                  </InputMain.Label>
-                </InputMain.Root>
+                <TextEditor value={field.value} onChange={field.onChange} />
               </FormControl>
               <FormMessage className="absolute" />
             </FormItem>

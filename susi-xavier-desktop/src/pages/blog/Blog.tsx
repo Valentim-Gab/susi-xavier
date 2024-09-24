@@ -1,6 +1,8 @@
-import FormBlog from '@/components/forms/FormBlog'
+import { Message } from '@/interfaces/Blog'
 import { BlogService } from '@/services/BlogService'
 import { useQuery } from '@tanstack/react-query'
+import FormBlog from '@/components/forms/FormBlog'
+import InnerHtmlContainer from '@/components/InnerHtmlContainer/InnerHtmlContainer'
 
 export default function Blog() {
   const blogService = new BlogService()
@@ -18,34 +20,33 @@ export default function Blog() {
   }
 
   return (
-    <main className="flex-1 flex flex-col gap-4 p-4">
+    <main className="flex-1 flex flex-col p-4">
       <section className="section flex flex-col gap-8 p-8">
         <h1 className="text-xl">Cadastrar mensagem</h1>
         <FormBlog onRefresh={refetch} />
       </section>
-      <section className="flex-auto section flex flex-col p-8 gap-8">
-        <h1 className="text-xl">Mensagens</h1>
-        {data && data.length > 0 && (
-          <div className="flex flex-col gap-4">
-            {data.map((blog_message: any, index: number) => (
-              <article
-                key={index}
-                className="flex flex-col bg-background-secondary py-2 px-4 rounded-lg"
-              >
-                <p className="text-foreground-strong">{blog_message.message}</p>
-                <p className="text-muted-foreground text-sm">12/12/1212</p>
-              </article>
-            ))}
-          </div>
-        )}
-        {!data ||
-          (data.length === 0 && (
-            <div className="flex flex-col items-center justify-center gap-4 py-16 px-4">
-              <i className="icon-[solar--hashtag-chat-bold-duotone] w-[80px] h-[80px] text-primary"></i>
-              <h3 className="text-center">Nenhuma mensagem cadastrada</h3>
+      <h1 className="text-foreground-strong font-bold mt-4">Mensagens</h1>
+      {data && data.length > 0 && (
+        <section className="flex-auto flex flex-col gap-4 mt-4">
+          {data.map((blog_message: Message, index: number) => (
+            <div
+              key={index}
+              className="flex flex-col bg-card shadow p-4 rounded-lg"
+            >
+              <InnerHtmlContainer html={blog_message.message} />
+              <p className="text-muted-foreground text-sm mt-4 place-self-end">12/12/1212</p>
             </div>
           ))}
-      </section>
+        </section>
+      )}
+
+      {!data ||
+        (data.length === 0 && (
+          <section className="section flex flex-col items-center justify-center gap-4 py-16 px-4 mt-4">
+            <i className="icon-[solar--hashtag-chat-bold-duotone] w-[80px] h-[80px] text-primary"></i>
+            <h3 className="text-center">Nenhuma mensagem cadastrada</h3>
+          </section>
+        ))}
     </main>
   )
 }
