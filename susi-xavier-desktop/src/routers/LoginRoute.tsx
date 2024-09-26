@@ -1,8 +1,8 @@
 import { getTokens } from '@/helpers/StorageHelper'
+import Login from '@/pages/auth/login/Login'
 import { AuthService } from '@/services/AuthService'
 import { useQuery } from '@tanstack/react-query'
 import { Navigate } from 'react-router-dom'
-import Login from '@/pages/login/Login'
 
 export function LoginRoute() {
   const tokens = getTokens()

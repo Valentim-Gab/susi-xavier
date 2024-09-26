@@ -7,4 +7,5 @@ interface User {
   date_birth?: Date;
   profile_image?: string;
   role: Array<'admin' | 'user'>;
+  verified_email: boolean;
 }

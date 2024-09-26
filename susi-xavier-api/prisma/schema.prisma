@@ -8,16 +8,17 @@ datasource db {
 }
 
 model users {
-  id            Int             @id @default(autoincrement())
-  name          String          @db.VarChar(100)
-  last_name     String?         @db.VarChar(100)
-  email         String          @unique @db.VarChar(100)
-  password      String
-  date_birth    DateTime?       @db.Date
-  phone_number  String?         @db.VarChar(25)
-  role          String[]        @db.VarChar(10)
-  profile_image String?
-  blog_messages blog_messages[]
+  id             Int             @id @default(autoincrement())
+  name           String          @db.VarChar(100)
+  last_name      String?         @db.VarChar(100)
+  email          String          @unique @db.VarChar(100)
+  password       String
+  date_birth     DateTime?       @db.Date
+  phone_number   String?         @db.VarChar(25)
+  role           String[]        @db.VarChar(10)
+  profile_image  String?
+  verified_email Boolean?        @default(false)
+  blog_messages  blog_messages[]
 }
 
 model blog_messages {

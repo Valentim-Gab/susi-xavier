@@ -6,6 +6,7 @@ import { users } from '@prisma/client'
 import { Role } from 'src/enums/Role'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { PrismaUtil } from 'src/utils/prisma.util'
+import { AuthService } from 'src/security/auth/auth.service'
 
 @Injectable()
 export class UserService {
@@ -18,12 +19,14 @@ export class UserService {
     phone_number: true,
     role: true,
     profile_image: true,
+    verified_email: true,
   }
 
   constructor(
     private prisma: PrismaService,
     private bcrypt: BCryptService,
     private prismaUtil: PrismaUtil,
+    private authService: AuthService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -45,10 +48,14 @@ export class UserService {
           role: [Role.User],
         }
 
-        return this.prisma.users.create({
+        const user = await this.prisma.users.create({
           data: userDto,
           select: this.selectedColumns,
         })
+
+        this.authService.sendVerifyEmail(createUserDto.email)
+
+        return user
       },
     )
   }
@@ -108,7 +115,7 @@ export class UserService {
         const encryptPassword = await this.bcrypt.encrypt(password)
 
         return this.prisma.users.update({
-          where: { id: 3 },
+          where: { id: idUser },
           data: { password: encryptPassword },
           select: this.selectedColumns,
         })

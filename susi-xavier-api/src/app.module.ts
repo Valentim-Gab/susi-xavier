@@ -5,6 +5,8 @@ import { PrismaModule } from 'nestjs-prisma'
 import { ConfigModule } from '@nestjs/config'
 import configuration from './config/configuration'
 import { BlogModule } from './routers/blog/blog.module'
+import { MailerModule } from '@nestjs-modules/mailer'
+import { mailerConfig } from './config/mailer.config'
 
 @Module({
   imports: [
@@ -12,6 +14,7 @@ import { BlogModule } from './routers/blog/blog.module'
     UserModule,
     BlogModule,
     PrismaModule.forRoot(),
+    MailerModule.forRoot(mailerConfig),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],

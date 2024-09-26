@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common'
+import { forwardRef, Global, Module } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { AuthController } from './auth.controller'
 import { UserModule } from 'src/routers/user/user.module'
@@ -14,7 +14,7 @@ import { AuthConstants } from 'src/constants/auth.constant'
 @Global()
 @Module({
   imports: [
-    UserModule,
+    forwardRef(() => UserModule),
     PassportModule,
     JwtModule.registerAsync({
       useFactory: (config: ConfigService) => ({

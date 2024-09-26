@@ -108,8 +108,8 @@ export default function FormLogin({ className }: FormLoginProps) {
               <FormMessage />
               <div className="flex flex-col items-end w-full">
                 <Link
-                  to="#"
-                  className="text-xs font-light underline lg:text-sm"
+                  to="public/forgot"
+                  className="text-xs font-light lg:text-sm"
                 >
                   Esqueci minha senha
                 </Link>

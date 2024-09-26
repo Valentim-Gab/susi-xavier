@@ -1,6 +1,7 @@
 import React from 'react'
 import { twMerge } from 'tailwind-merge'
 import { VariantProps, tv } from 'tailwind-variants'
+import { Loader2 } from 'lucide-react'
 
 const buttonStyle = tv({
   base: 'flex justify-center items-center gap-2 px-8 py-4 text-white bg-primary rounded font-bold hover:brightness-95',
@@ -20,11 +21,14 @@ interface ButtonMainProps
       React.ButtonHTMLAttributes<HTMLButtonElement>,
       HTMLButtonElement
     >,
-    VariantProps<typeof buttonStyle> {}
+    VariantProps<typeof buttonStyle> {
+  loading?: boolean
+}
 
 export default function ButtonMain({
   variant,
   screen,
+  loading,
   ...rest
 }: ButtonMainProps) {
   function getChildren() {
@@ -45,6 +49,7 @@ export default function ButtonMain({
       {...rest}
       className={twMerge(buttonStyle({ variant, screen }), rest.className)}
     >
+      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
       {getChildren()}
     </button>
   )
