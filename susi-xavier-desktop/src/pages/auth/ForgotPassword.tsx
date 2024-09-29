@@ -1,6 +1,5 @@
 import { AuthService } from '../../services/AuthService'
 import { z } from 'zod'
-import { useToast } from '@/hooks/use-toast'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -25,7 +24,6 @@ export const formSchema = z.object({
 export default function ForgotPassword() {
   const authService = new AuthService()
   const router = useNavigate()
-  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,23 +40,11 @@ export default function ForgotPassword() {
 
     setLoading(true)
 
-    const resp = await authService.sendRecoverEmail(values.username)
+    const isSuccess = await authService.sendRecoverEmail(values.username)
 
     setLoading(false)
 
-    if (resp.success) {
-      router('/')
-      toast({
-        title: 'Email enviado com sucesso!',
-        description: resp.message,
-        variant: 'positive',
-      })
-    } else {
-      toast({
-        title: resp.message,
-        variant: 'destructive',
-      })
-    }
+    if (isSuccess) router('/')
   }
 
   return (

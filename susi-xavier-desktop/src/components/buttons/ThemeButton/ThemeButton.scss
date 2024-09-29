@@ -1,0 +1,155 @@
+.theme {
+  
+  /* From Uiverse.io by 3bdel3ziz-T */
+  .app-theme {
+    --light-col: #e8e8e8;
+    --dark-col: #26242e;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 35px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+    width: 18rem;
+    height: 18rem;
+    background-color: #e8e8e8;
+    border-radius: 30px;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .app-theme::before {
+    --dimension: 50px;
+    content: "";
+    width: var(--dimension);
+    height: var(--dimension);
+    border-radius: 50%;
+    background: #26242e;
+    position: absolute;
+    top: calc(50% - (var(--dimension) / 2));
+    left: calc(50% - (var(--dimension)) / 2);
+    display: block;
+    box-shadow: 0px 0px 0 0px var(--dark-col);
+    z-index: -1;
+    transition: 400ms ease-out;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    width: 100%;
+  }
+
+  .battery {
+    display: inline-block;
+    width: 0.85rem;
+    height: 0.45rem;
+    background-color: var(--dark-col);
+  }
+
+  .network {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 6.8px 7.2px 6.8px;
+    border-color: transparent transparent var(--dark-col) transparent;
+    transform: rotate(135deg);
+  }
+
+  /*circle*/
+  .circle {
+    position: relative;
+    border-radius: 100%;
+    width: 8rem;
+    height: 8rem;
+    background: linear-gradient(40deg, #ff0080, #ff8c00 70%);
+    margin: auto;
+  }
+
+  .circle::before {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    right: 0;
+    width: 6rem;
+    height: 6rem;
+    z-index: 1;
+    background: var(--bg);
+    transform: scale(0);
+    transform-origin: top right;
+    transition: 450ms;
+  }
+
+  label {
+    width: auto;
+    margin: 20px 30px;
+    padding: 15px 35px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    position: relative;
+    cursor: pointer;
+
+    font-size: 1.1rem;
+    font-weight: bolder;
+    color: var(--dark-col);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  label::before {
+    content: "";
+    position: absolute;
+    width: 50%;
+    inset: 0;
+    border-radius: inherit;
+    display: block;
+    z-index: -1;
+    background-color: #fff;
+    -webkit-box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+    -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: -webkit-transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition:
+      transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      -webkit-transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  [type="checkbox"] {
+    appearance: none;
+  }
+
+  [type="checkbox"]:checked + .app-theme label span.light {
+    color: var(--light-col);
+  }
+
+  [type="checkbox"]:checked + .app-theme label::before {
+    transform: translateX(100%);
+  }
+
+  [type="checkbox"]:checked + .app-theme::before {
+    box-shadow: 0px 0px 0 150px var(--dark-col);
+  }
+  /* Circle */
+  [type="checkbox"]:checked + .app-theme .circle::before {
+    transform: scale(1);
+    background: var(--dark-col);
+  }
+
+  [type="checkbox"]:checked + .app-theme .circle {
+    background: linear-gradient(40deg, #8983f7, #a3dafb 70%);
+  }
+
+  [type="checkbox"]:checked + .app-theme .time {
+    color: var(--light-col);
+  }
+
+  [type="checkbox"]:checked + .app-theme .icons .network {
+    border-bottom-color: var(--light-col);
+  }
+
+  [type="checkbox"]:checked + .app-theme .icons .battery {
+    background-color: var(--light-col);
+  }
+}

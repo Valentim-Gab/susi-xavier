@@ -1,6 +1,5 @@
 import { AuthService } from '../../services/AuthService'
 import { z } from 'zod'
-import { useToast } from '@/hooks/use-toast'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -51,7 +50,6 @@ export default function ResetPassword() {
   }
 
   const authService = new AuthService()
-  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,24 +64,13 @@ export default function ResetPassword() {
       return
     }
 
-    const resp = await authService.resetPassword(
+    const isSuccess = await authService.resetPassword(
       values.password,
       values.passwordConfirmation,
       token
     )
 
-    if (resp.success) {
-      setSubmitted(true)
-      toast({
-        title: resp.message,
-        variant: 'positive',
-      })
-    } else {
-      toast({
-        title: resp.message,
-        variant: 'destructive',
-      })
-    }
+    if (isSuccess) setSubmitted(true)
   }
 
   return (

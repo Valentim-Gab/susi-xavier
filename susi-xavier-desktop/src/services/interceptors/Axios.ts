@@ -1,6 +1,8 @@
 import { environment } from '@/environments/environment'
-import { getTokens, removeTokens, storageTokens } from '@/helpers/StorageHelper'
+import { getTokens, storageTokens, storageUser } from '@/helpers/StorageHelper'
+import { toast } from '@/hooks/use-toast'
 import axios, { HttpStatusCode } from 'axios'
+import { AuthService } from '../AuthService'
 
 const axiosInterceptor = axios.create({
   baseURL: environment.apiUrl,
@@ -41,19 +43,21 @@ axiosInterceptor.interceptors.response.use(
             }),
           })
 
-          console.log(res)
-
           if (!res || res.status == HttpStatusCode.Unauthorized) {
-            removeTokens()
-            window.location.href = '/?expired=true'
+            const authService = new AuthService()
+            const isSuccess = authService.signOut()
 
-            return
+            if (isSuccess) {
+              window.location.href = '/?expired=true'
+              return
+            }
           }
 
           const data = await res.json()
 
-          if (data.tokens) {
+          if (data.tokens && data.user) {
             storageTokens(data.tokens)
+            storageUser(data.user)
             error.config.headers.Authorization = `Bearer ${data.access_token}`
 
             return axiosInterceptor.request(error.config)

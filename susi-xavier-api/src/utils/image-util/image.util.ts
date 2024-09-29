@@ -21,7 +21,7 @@ export class ImageUtil {
 
   async save(
     multipartFile: Express.Multer.File,
-    id: string,
+    id: string | number,
     lastDir: string,
   ): Promise<string> {
     return this.saveStrategy.save(multipartFile, id, lastDir)

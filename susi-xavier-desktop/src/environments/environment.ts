@@ -1,4 +1,5 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:3001',
+    //apiUrl: 'https://susi-xavier-api.valentim.tech',
+    apiUrl: 'http://localhost:3000',
 };

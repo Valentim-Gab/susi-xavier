@@ -8,6 +8,9 @@ import {
   Delete,
   UseGuards,
   ParseIntPipe,
+  UseInterceptors,
+  UploadedFile,
+  Res,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -19,6 +22,8 @@ import { Role } from 'src/enums/Role'
 import { ValidationPipe } from 'src/pipes/validation.pipe'
 import { ReqUser } from 'src/decorators/req-user.decorator'
 import { users } from '@prisma/client'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { Response } from 'express'
 
 @Controller('user')
 export class UserController {
@@ -92,5 +97,23 @@ export class UserController {
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) userId: number) {
     return this.userService.delete(userId)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.User, Role.Admin)
+  @Get('@me/avatar')
+  downloadAvatar(@ReqUser() user: users, @Res() res: Response) {
+    return this.userService.findImg(user, res)
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.User, Role.Admin)
+  @Patch('@me/avatar')
+  @UseInterceptors(FileInterceptor('avatar'))
+  uploadAvatar(
+    @ReqUser() user: users,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return this.userService.updateImg(image, user)
   }
 }

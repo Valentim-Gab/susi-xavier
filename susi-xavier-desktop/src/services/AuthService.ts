@@ -1,13 +1,16 @@
 import { environment } from '@/environments/environment'
 import {
   removeTokens,
+  removeUser,
   storageTokens,
   storageUser,
 } from '@/helpers/StorageHelper'
 import { Login } from '@/interfaces/Login'
 import { HttpStatusCode } from 'axios'
 import axiosInterceptor from './interceptors/Axios'
-import { ResReturn } from '@/interfaces/ResReturn'
+import { store } from '@/stores/store'
+import { clearAvatar } from '@/stores/AvatarSlice'
+import { toast } from '@/hooks/use-toast'
 
 export class AuthService {
   async signIn(login: Login): Promise<boolean> {
@@ -44,6 +47,8 @@ export class AuthService {
   signOut(): Boolean {
     try {
       removeTokens()
+      removeUser()
+      store.dispatch(clearAvatar())
       return true
     } catch (error) {
       return false
@@ -102,7 +107,7 @@ export class AuthService {
     }
   }
 
-  async sendRecoverEmail(email: string): Promise<ResReturn> {
+  async sendRecoverEmail(email: string): Promise<boolean> {
     const url = `${environment.apiUrl}/send-recover-email`
 
     try {
@@ -114,20 +119,35 @@ export class AuthService {
         body: JSON.stringify({ email }),
       })
 
-      if (!res || !res.ok) {
-        const data = await res.json()
-
-        return {
-          success: false,
-          message: data.message ?? 'Erro ao enviar email',
-        }
+      if (!res) {
+        return false
       }
 
       const data = await res.json()
 
-      return { success: true, message: data.message }
+      if (!res.ok) {
+        toast({
+          title: data.message,
+          variant: 'destructive',
+        })
+
+        return false
+      }
+
+      toast({
+        title: 'Email enviado com sucesso!',
+        description: data.message,
+        variant: 'positive',
+      })
+
+      return true
     } catch (error) {
-      return { success: false, message: 'Erro ao enviar email' }
+      toast({
+        title: 'Erro ao enviar email',
+        variant: 'destructive',
+      })
+
+      return false
     }
   }
 
@@ -135,7 +155,7 @@ export class AuthService {
     password: string,
     confirmationPassword: string,
     token: string
-  ): Promise<ResReturn> {
+  ): Promise<boolean> {
     const url = `${environment.apiUrl}/reset-password/${token}`
 
     try {
@@ -153,18 +173,27 @@ export class AuthService {
       const data = await res.json()
 
       if (!res || !res.ok) {
-        return {
-          success: false,
-          message: 'Erro ao resetar senha',
-        }
+        toast({
+          title: 'Erro ao resetar senha',
+          variant: 'destructive',
+        })
+
+        return false
       }
 
-      return {
-        success: true,
-        message: data.message ?? 'Senha resetada com sucesso!',
-      }
+      toast({
+        title: data.message ?? 'Senha resetada com sucesso!',
+        variant: 'positive',
+      })
+
+      return true
     } catch (error) {
-      return { success: false, message: 'Erro ao resetar senha' }
+      toast({
+        title: 'Erro ao resetar senha',
+        variant: 'destructive',
+      })
+
+      return false
     }
   }
 }

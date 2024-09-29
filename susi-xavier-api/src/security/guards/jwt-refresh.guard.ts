@@ -24,22 +24,38 @@ export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {
 
         refreshToken = tokens.refresh_token ?? null
         accessToken = tokens.access_token ?? null
+      }
 
-        if (accessToken) {
-          const decodedToken = jwt.decode(
-            accessToken,
-            this.config.get('secret'),
-          )
+      if (accessToken) {
+        try {
+          const decodedToken = jwt.decode(accessToken) as jwt.JwtPayload
+
+          if (!decodedToken) {
+            throw new UnauthorizedException(
+              'Token de acesso inválido',
+              ErrorConstants.INVALID_TOKEN,
+            )
+          }
 
           user = {
             id: decodedToken.sub,
             username: decodedToken.username,
             role: decodedToken.role,
           }
+        } catch (error) {
+          throw new UnauthorizedException(
+            'Erro ao decodificar o token',
+            ErrorConstants.INVALID_TOKEN,
+          )
         }
+      } else {
+        throw new UnauthorizedException(
+          'Não autenticado',
+          ErrorConstants.UNAUTHENTICATED,
+        )
       }
 
-      if (refreshToken && accessToken) {
+      if (refreshToken) {
         try {
           jwt.verify(refreshToken, this.config.get('refreshSecret'))
         } catch (error) {
@@ -50,7 +66,7 @@ export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {
             )
           }
           throw new UnauthorizedException(
-            'Token inválido',
+            'Token de refresh inválido',
             ErrorConstants.INVALID_TOKEN,
           )
         }
@@ -67,9 +83,7 @@ export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {
 
   private extractRefreshTokenFromBody(context: ExecutionContext): string {
     const request = context.switchToHttp().getRequest()
-    const refreshToken = request.body.refresh_token
-
-    return refreshToken ?? null
+    return request.body?.refresh_token ?? null
   }
 
   private extractTokenFromAuthHeader(context: ExecutionContext): string {
@@ -85,10 +99,6 @@ export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {
 
   private extractTokensFromCookies(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest()
-    const tokens = request.cookies
-
-    console.log(request.cookies)
-
-    return tokens
+    return request.cookies ?? {}
   }
 }

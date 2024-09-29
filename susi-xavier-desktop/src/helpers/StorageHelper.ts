@@ -31,3 +31,7 @@ export function getUser(): User | null {
 export function removeTokens() {
   localStorage.removeItem('tokens')
 }
+
+export function removeUser() {
+  localStorage.removeItem('user')
+}

@@ -2,11 +2,38 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSidebar } from '../providers/SidebarProvider'
 import './Sidebar.scss'
 import { AuthService } from '@/services/AuthService'
+import { getUser } from '@/helpers/StorageHelper'
+import { UserService } from '@/services/UserService'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 
 export default function Sidebar() {
   const sidebarContext = useSidebar()
   const location = useLocation()
   const navigate = useNavigate()
+  const user = getUser()
+  const [avatar, setAvatar] = useState<string | null>(null)
+  const userService = new UserService()
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['download_avatar'],
+    queryFn: userService.getAvatar,
+    retry: false,
+  })
+
+  useEffect(() => {
+    if (data) {
+      setAvatar(data)
+    }
+  }, [data])
+
+  if (isLoading) {
+    return
+  }
+
+  if (!user) {
+    return
+  }
 
   if (!sidebarContext) {
     return null
@@ -28,11 +55,6 @@ export default function Sidebar() {
       icon: 'icon-[solar--chat-square-like-bold]',
       name: 'Blog',
       link: '/dashboard/blog',
-    },
-    {
-      icon: 'icon-[solar--user-circle-bold]',
-      name: 'Perfil',
-      link: '/dashboard/perfil',
     },
     {
       icon: 'icon-[solar--settings-bold]',
@@ -78,13 +100,27 @@ export default function Sidebar() {
             <i className="icon-[f7--xmark]"></i>
           </button>
           <div className="flex flex-row gap-4">
-            <img src="/imgs/susi.png" alt="Logo" className="w-[60px]" />
+            <div className="w-[60px] aspect-square rounded-full overflow-hidden">
+              {avatar ? (
+                <img
+                  src={avatar}
+                  alt="Avatar"
+                  className="object-cover object-top"
+                />
+              ) : (
+                <i className="icon-[solar--user-circle-bold] text-6xl"></i>
+              )}
+            </div>
             <div>
-              <h2 className="text-xl font-bold">Administrador</h2>
-              <p className="text-sm text-muted-foreground">adm@email.vale</p>
+              <h2 className="text-xl font-bold">
+                {user?.name ?? 'Não reconhecido'}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {user?.email ?? ''}
+              </p>
             </div>
           </div>
-          <div className="mt-8 text-base flex flex-col gap-4">
+          <div className="flex-auto mt-8 text-base flex flex-col gap-4">
             {sidebarItems.map((item, index) => (
               <Link
                 key={index}
@@ -99,10 +135,10 @@ export default function Sidebar() {
             ))}
             <button
               onClick={logout}
-              className="relative flex flex-row items-center gap-4 p-2 rounded-lg hover:bg-primary hover:text-primary-foreground transition duration-200 ease-in-out"
+              className="relative flex flex-row items-center gap-4 p-2 rounded-lg hover:bg-primary hover:text-primary-foreground transition duration-200 ease-in-out mt-auto"
             >
               <i className="icon-[solar--logout-3-bold] text-2xl"></i>
-              <span>Sair</span>
+              <span className="text-lg font-medium">Sair</span>
             </button>
           </div>
         </div>

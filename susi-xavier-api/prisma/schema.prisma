@@ -16,7 +16,7 @@ model users {
   date_birth     DateTime?       @db.Date
   phone_number   String?         @db.VarChar(25)
   role           String[]        @db.VarChar(10)
-  profile_image  String?
+  avatar         String?
   verified_email Boolean?        @default(false)
   blog_messages  blog_messages[]
 }

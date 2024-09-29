@@ -4,7 +4,6 @@ import { LoginRoute } from './LoginRoute'
 import Blog from '@/pages/blog/Blog'
 import ConfigPage from '@/pages/configuracoes/ConfigPage'
 import Dashboard from '@/pages/dashboard/Dashboard'
-import Profile from '@/pages/perfil/Profile'
 import VerifyEmail from '@/pages/auth/VerifyEmail'
 import ForgotPassword from '@/pages/auth/ForgotPassword'
 import ResetPassword from '@/pages/auth/ResetPassword'
@@ -22,7 +21,6 @@ const AppRoutes = () => {
         >
           <Route index element={<Dashboard />} />
           <Route path="blog" element={<Blog />} />
-          <Route path="perfil" element={<Profile />} />
           <Route path="configuracoes" element={<ConfigPage />} />
         </Route>
         <Route path="/public" element={<PublicLayout />}>

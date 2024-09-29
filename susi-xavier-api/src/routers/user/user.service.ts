@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { CreateUserDto } from './dto/create-user.dto'
 import { PrismaService } from 'nestjs-prisma'
 import { BCryptService } from 'src/security/private/bcrypt.service'
@@ -7,6 +7,10 @@ import { Role } from 'src/enums/Role'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { PrismaUtil } from 'src/utils/prisma.util'
 import { AuthService } from 'src/security/auth/auth.service'
+import { ImageUtil } from 'src/utils/image-util/image.util'
+import { CompressImageSaveStrategy } from 'src/utils/image-util/strategies/compress-image-save.strategy'
+import { DefaultImageSaveStrategy } from 'src/utils/image-util/strategies/default-image-save.strategy'
+import { Response } from 'express'
 
 @Injectable()
 export class UserService {
@@ -18,7 +22,7 @@ export class UserService {
     date_birth: true,
     phone_number: true,
     role: true,
-    profile_image: true,
+    avatar: true,
     verified_email: true,
   }
 
@@ -27,6 +31,7 @@ export class UserService {
     private bcrypt: BCryptService,
     private prismaUtil: PrismaUtil,
     private authService: AuthService,
+    private imageUtil: ImageUtil,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -75,7 +80,7 @@ export class UserService {
     return this.prismaUtil.performOperation(
       'Não foi possível buscar pelo usuário',
       async () => {
-        return this.prisma.users.findFirst({
+        return this.prisma.users.findUnique({
           where: { id: idUser },
           select: this.selectedColumns,
         })
@@ -129,6 +134,42 @@ export class UserService {
       async () => {
         return this.prisma.users.delete({
           where: { id: userId },
+          select: this.selectedColumns,
+        })
+      },
+    )
+  }
+
+  async findImg(user: users, res: Response) {
+    const userDB: users = await this.findOne(user.id)
+
+    try {
+      const bytes = await this.imageUtil.get(userDB.avatar, 'user')
+
+      res.setHeader('Content-Type', 'avatar/*')
+      res.send(bytes)
+    } catch (error) {
+      throw new BadRequestException(`Foto não encontrada`)
+    }
+  }
+
+  async updateImg(image: Express.Multer.File, user: users) {
+    const userId = user.id
+    const strategy =
+      image.size > 1_000_000
+        ? new CompressImageSaveStrategy(this.imageUtil)
+        : new DefaultImageSaveStrategy(this.imageUtil)
+
+    this.imageUtil.setSaveStrategy(strategy)
+
+    const filename = await this.imageUtil.save(image, userId, 'user')
+
+    return this.prismaUtil.performOperation(
+      'Não foi possível atualizar seu avatar',
+      async () => {
+        return this.prisma.users.update({
+          where: { id: userId },
+          data: { avatar: filename },
           select: this.selectedColumns,
         })
       },
